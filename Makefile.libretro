@@ -600,9 +600,14 @@ else ifeq ($(platform), emscripten)
    # we can use -lz for emscripten's built-in zlib port
    WANT_ZLIB=0
    CFLAGS_OPT = -O2
-   CFLAGS += -DNO_DYLIB -DNO_SOCKET
+   CFLAGS += -DNO_DYLIB -DNO_SOCKET --use-port=zlib
    CFLAGS += -msimd128 -ftree-vectorize
-   LIBPTHREAD :=
+   ifneq ($(pthread), 0)
+      CFLAGS += -pthread
+      LIBPTHREAD := -lpthread
+   else
+      LIBPTHREAD := 
+   endif
    USE_RTHREADS=0
    USE_ASYNC_CDROM=0
    USE_ASYNC_GPU=0
